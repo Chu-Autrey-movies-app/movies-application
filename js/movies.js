@@ -1,8 +1,11 @@
-// movies.js
+// Handles movie searches and adding search results to the watchlist.
+"use strict";
+
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const movieList = document.getElementById("movie-list");
 
+// Replace the current results while the Netlify Function is working.
 function showLoadingIndicator() {
   movieList.innerHTML = `<div class="loading">Loading...</div>`;
 }
@@ -21,8 +24,9 @@ async function searchMovies() {
   showLoadingIndicator();
 
   try {
+    // The serverless function keeps the OMDb API key out of browser code.
     const response = await fetch(
-      `https://www.omdbapi.com/?apikey=${API_KEY}&s=${searchTerm}`
+      `/.netlify/functions/omdb?s=${encodeURIComponent(searchTerm)}`,
     );
     const data = await response.json();
 
@@ -67,14 +71,15 @@ function displayMovies(movies) {
 }
 
 function addToWatchlist(event) {
-  const imdbID = event.target.getAttribute("data-imdbid");
+  const imdbID = event.currentTarget.dataset.imdbid;
+  // Only IMDb IDs are stored so complete movie details can be fetched later.
   let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
 
   if (!watchlist.includes(imdbID)) {
     watchlist.push(imdbID);
     localStorage.setItem("watchlist", JSON.stringify(watchlist));
-    event.target.textContent = "Added to Watchlist";
-    event.target.disabled = true;
+    event.currentTarget.textContent = "Added to Watchlist";
+    event.currentTarget.disabled = true;
   } else {
     alert("This movie is already in your watchlist.");
   }

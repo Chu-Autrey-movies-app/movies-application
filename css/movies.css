@@ -1,4 +1,4 @@
-/* movies.css */
+/* Shared layout and visual styles for both application pages. */
 body {
   font-family: "Helvetica Neue", sans-serif;
   margin: 0;
@@ -12,6 +12,7 @@ body {
   min-height: 100vh;
 }
 
+/* Site header and page navigation */
 header {
   background-color: rgba(0, 0, 0, 0.7);
   width: 100%;
@@ -36,10 +37,23 @@ main {
   padding: 2rem;
 }
 
+/* Search controls */
 #search-section {
   display: flex;
   justify-content: center;
   margin-bottom: 2rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 #search-input {
@@ -60,6 +74,7 @@ main {
   cursor: pointer;
 }
 
+/* Movie cards and their content */
 .movie-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -71,7 +86,9 @@ main {
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .movie-item:hover {

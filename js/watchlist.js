@@ -1,7 +1,10 @@
-// watchlist.js
+// Loads saved movie details and handles watchlist removal.
+"use strict";
+
 const watchlistSection = document.getElementById("watchlist-section");
 
 async function loadWatchlist() {
+  // localStorage persists the watchlist for this browser between visits.
   const watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
 
   if (watchlist.length === 0) {
@@ -15,8 +18,9 @@ async function loadWatchlist() {
 
   try {
     for (const imdbID of watchlist) {
+      // Fetch each saved movie's current details from the serverless function.
       const response = await fetch(
-        `https://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbID}`
+        `/.netlify/functions/omdb?i=${encodeURIComponent(imdbID)}`,
       );
       const movie = await response.json();
       displayMovie(movie);
@@ -54,9 +58,10 @@ function displayMovie(movie) {
 }
 
 function removeFromWatchlist(event) {
-  const imdbID = event.target.getAttribute("data-imdbid");
+  const imdbID = event.target.dataset.imdbid;
   let watchlist = JSON.parse(localStorage.getItem("watchlist")) || [];
 
+  // Update storage first so the UI and saved data stay in sync.
   watchlist = watchlist.filter((id) => id !== imdbID);
   localStorage.setItem("watchlist", JSON.stringify(watchlist));
 
